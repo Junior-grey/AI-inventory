@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+/* Apply Sleek Interface Theme defaults in dark mode */
+html.dark, .dark {
+  background-color: #020617 !important;
+  color: #f1f5f9 !important;
+}
+
+.dark body {
+  background-color: #020617 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Custom premium styling for sleek glass interfaces */
+.backdrop-blur-md {
+  backdrop-filter: blur(16px);
+}
+
+/* Glass Card styling */
+.glass-card {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass-card-hover:hover {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 12px 40px -12px rgba(59, 130, 246, 0.18);
+}
+
+/* Universal Dark Mode Override for Cards, Inputs & Buttons */
+.dark .bg-white {
+  background-color: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+.dark .border-gray-200,
+.dark .border-gray-200\/80,
+.dark .border-gray-100,
+.dark .border-gray-300 {
+  border-color: rgba(30, 41, 59, 0.7) !important;
+}
+
+.dark .text-gray-900 {
+  color: #f8fafc !important;
+}
+
+.dark .text-gray-700,
+.dark .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-gray-500,
+.dark .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-50\/50,
+.dark .bg-gray-100 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+/* Hover effects for dark mode grids */
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* Sleek inputs in Dark Mode */
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="search"],
+.dark textarea,
+.dark select {
+  background-color: rgba(15, 23, 42, 0.7) !important;
+  border-color: rgba(30, 41, 59, 0.9) !important;
+  color: #f8fafc !important;
+}
+
+.dark input[type="text"]:focus,
+.dark input[type="email"]:focus,
+.dark input[type="search"]:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Code blocks style */
+.dark pre {
+  background-color: #030712 !important;
+  border: 1px solid rgba(30, 41, 59, 0.9) !important;
+}
+
+/* Navigation bar specific glass override */
+.dark header {
+  background-color: rgba(2, 6, 23, 0.7) !important;
+  backdrop-filter: blur(16px) !important;
+  border-color: rgba(30, 41, 59, 0.8) !important;
+}
+
+/* Hover shadow adjustments */
+.dark .hover\:shadow-md:hover,
+.dark .hover\:shadow-lg:hover {
+  box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15) !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+/* Base utility for beautiful micro interactions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Hide scrollbar for clean carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

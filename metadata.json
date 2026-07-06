@@ -1,0 +1,6 @@
+{
+  "name": "AI Inventory",
+  "description": "A premium, production-ready curated blog and directory indexing the world's most powerful AI models, automation workflows, and writing co-pilots.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
