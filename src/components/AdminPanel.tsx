@@ -119,8 +119,11 @@ export const AdminPanel: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Map Lucide icons dynamically
+  // Map Lucide icons or official logo image URLs dynamically
   const renderIcon = (name: string, className = "h-5 w-5") => {
+    if (name && (name.startsWith('http://') || name.startsWith('https://') || name.includes('/') || name.includes('.'))) {
+      return <img src={name} alt="Logo" className={`${className} object-contain rounded`} referrerPolicy="no-referrer" />;
+    }
     const IconComponent = (Icons as any)[name] || Icons.Cpu;
     return <IconComponent className={className} />;
   };

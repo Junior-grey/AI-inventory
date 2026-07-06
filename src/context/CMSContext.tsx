@@ -88,6 +88,12 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        // Automatically upgrade to expanded database if stored dataset is legacy/minimal
+        if (!parsed.posts || parsed.posts.length < 55 || !parsed.aiTools || parsed.aiTools.length < 35) {
+          const fresh = generateSampleData();
+          localStorage.setItem('ai_inventory_db', JSON.stringify(fresh));
+          return fresh;
+        }
         // Automatically upgrade to modern Sleek Interface dark theme default if using legacy light mode defaults
         if (parsed.themeSettings && (parsed.themeSettings.primaryColor === '#0052FF' || !parsed.themeSettings.isDarkMode)) {
           parsed.themeSettings = {

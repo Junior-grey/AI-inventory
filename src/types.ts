@@ -39,6 +39,7 @@ export interface AITool {
   logo: string; // Lucide icon or image link
   url: string;
   categoryId: string;
+  subcategory?: string; // Sub-section inside category (e.g. image generators, design generators)
   pricing: 'free' | 'freemium' | 'paid';
   features: string[];
   pros: string[];
