@@ -103,7 +103,7 @@ export const ReaderView: React.FC = () => {
     }
   }, [selectedPostId]);
 
-  // Filter posts based on search query, active category and tag
+  // Filter posts based on search query, active category and tag with high-accuracy relevance sorting
   const getFilteredPosts = () => {
     let result = posts.filter(p => p.status === 'published');
 
@@ -119,31 +119,104 @@ export const ReaderView: React.FC = () => {
     }
 
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
+      const q = searchQuery.toLowerCase().trim();
+      const matched = result.filter(
         p => p.title.toLowerCase().includes(q) || 
              p.content.toLowerCase().includes(q) ||
              p.summary.toLowerCase().includes(q) ||
              p.tags.some(t => t.toLowerCase().includes(q))
       );
+
+      const scored = matched.map(post => {
+        const titleLower = post.title.toLowerCase();
+        const summaryLower = post.summary.toLowerCase();
+        let score = 0;
+
+        if (titleLower === q) {
+          score += 1000;
+        } else if (titleLower.startsWith(q)) {
+          score += 500;
+        } else if (titleLower.includes(' ' + q)) {
+          score += 300;
+        } else if (titleLower.includes(q)) {
+          score += 150;
+        }
+
+        if (summaryLower.includes(q)) {
+          score += 50;
+        }
+
+        if (post.tags.some(t => t.toLowerCase() === q)) {
+          score += 100;
+        } else if (post.tags.some(t => t.toLowerCase().includes(q))) {
+          score += 40;
+        }
+
+        if (post.content.toLowerCase().includes(q)) {
+          score += 10;
+        }
+
+        return { post, score };
+      });
+
+      return scored
+        .sort((a, b) => b.score - a.score)
+        .map(item => item.post);
     }
 
     return result;
   };
 
-  // Filter tools based on category & search
+  // Filter tools based on category & search with high-accuracy relevance sorting
   const getFilteredTools = () => {
     let result = aiTools;
     if (selectedCategoryId && selectedCategoryId !== 'all-tools') {
       result = result.filter(t => t.categoryId === selectedCategoryId);
     }
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
+      const q = searchQuery.toLowerCase().trim();
+      
+      const matched = result.filter(
         t => t.name.toLowerCase().includes(q) || 
              t.description.toLowerCase().includes(q) ||
              t.features.some(f => f.toLowerCase().includes(q))
       );
+
+      const scored = matched.map(tool => {
+        const nameLower = tool.name.toLowerCase();
+        const descLower = tool.description.toLowerCase();
+        let score = 0;
+
+        if (nameLower === q) {
+          score += 1000;
+        } else if (nameLower.startsWith(q)) {
+          score += 500;
+        } else if (nameLower.includes(' ' + q) || nameLower.includes('-' + q)) {
+          score += 300;
+        } else if (nameLower.includes(q)) {
+          score += 150;
+        }
+
+        if (tool.subcategory && tool.subcategory.toLowerCase().includes(q)) {
+          score += 80;
+        }
+
+        if (descLower.startsWith(q)) {
+          score += 60;
+        } else if (descLower.includes(q)) {
+          score += 30;
+        }
+
+        if (tool.features.some(f => f.toLowerCase().includes(q))) {
+          score += 10;
+        }
+
+        return { tool, score };
+      });
+
+      return scored
+        .sort((a, b) => b.score - a.score || b.tool.rating - a.tool.rating)
+        .map(item => item.tool);
     }
     return result;
   };
