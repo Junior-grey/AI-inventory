@@ -264,7 +264,12 @@ export const ReaderView: React.FC = () => {
   const fontHeadingClass = themeSettings.fontHeading === 'Space Grotesk' ? 'font-heading' : 'font-heading';
 
   return (
-    <div className={`min-h-screen transition-all ${themeSettings.isDarkMode ? 'bg-[#020617] text-slate-100' : (themeSettings.bgStyle === 'slate' ? 'bg-slate-50 text-gray-900' : 'bg-gray-50/50 text-gray-900')} ${fontSansClass}`}>
+    <div 
+      className={`min-h-screen transition-all ${themeSettings.isDarkMode ? 'bg-[#020617] text-slate-100' : 'text-gray-900'} ${fontSansClass}`}
+      style={{ 
+        backgroundColor: themeSettings.isDarkMode ? '#020617' : themeSettings.secondaryColor 
+      }}
+    >
       
       {/* 1. Article Reading Progress Bar */}
       {selectedPostId && (
@@ -660,8 +665,8 @@ export const ReaderView: React.FC = () => {
               <div className="space-y-8 animate-in fade-in duration-300">
                 <button
                   onClick={() => setSelectedToolId(null)}
-                  className="flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                  style={{ color: themeSettings.primaryColor }}
+                  className="flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                  style={{ color: themeSettings.isDarkMode ? themeSettings.accentColor : themeSettings.primaryColor }}
                 >
                   <ChevronLeft className="h-4 w-4 mr-1" />
                   Back to Tools Directory
@@ -670,21 +675,27 @@ export const ReaderView: React.FC = () => {
                 {/* Hero Tool Card */}
                 <div className="rounded-3xl border border-gray-200/80 bg-white p-6 sm:p-8 dark:border-gray-800/80 dark:bg-gray-900 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
                   <div className="md:col-span-8 space-y-4">
-                    <div className="flex items-center space-x-3.5">
-                      <div className="h-14 w-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/40 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
-                        {renderIcon(tool.logo, "h-8 w-8")}
+                    <div className="flex items-center space-x-4">
+                      {/* Large, Beautiful Tool Icon with Verified Badge */}
+                      <div className="relative h-20 w-20 sm:h-24 sm:w-24 rounded-2xl border border-gray-200 bg-white p-3 flex items-center justify-center dark:bg-gray-800 dark:border-gray-700 flex-shrink-0 shadow-sm transition-all duration-300 hover:scale-105">
+                        <div className="text-blue-600 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
+                          {renderIcon(tool.logo, "h-12 w-12 sm:h-14 sm:w-14")}
+                        </div>
+                        <div className="absolute -top-1.5 -right-1.5 h-6 w-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md border-2 border-white dark:border-gray-950">
+                          <Check className="h-3.5 w-3.5 stroke-[3px]" />
+                        </div>
                       </div>
                       <div>
                         <h1 className={`${fontHeadingClass} text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white`}>
                           {tool.name}
                         </h1>
-                        <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">
+                        <span className="text-xs font-semibold text-gray-550 dark:text-gray-400">
                           {category?.name || 'AI Inventory'} Directory Product
                         </span>
                       </div>
                     </div>
                     
-                    <p className="text-base text-gray-500 dark:text-gray-400 leading-relaxed">
+                    <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
                       {tool.description}
                     </p>
 
@@ -827,34 +838,55 @@ export const ReaderView: React.FC = () => {
                 getFilteredTools().map(tool => (
                   <div 
                     key={tool.id}
-                    className="group rounded-2xl border border-gray-200/80 bg-white p-5 hover:shadow-md hover:border-blue-500/20 transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between"
+                    className="group rounded-2xl border border-gray-200/80 bg-white p-5 hover:shadow-md hover:border-blue-500/20 transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between animate-in fade-in duration-300"
                   >
                     <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <div className="h-11 w-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/30 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
-                            {renderIcon(tool.logo, "h-6 w-6")}
+                      <div className="flex items-start space-x-4">
+                        {/* Large, Beautiful Tool Icon with Verified Badge */}
+                        <div className="relative h-16 w-16 sm:h-20 sm:w-20 rounded-2xl border border-gray-200 bg-white p-2.5 flex items-center justify-center dark:bg-gray-800 dark:border-gray-700 flex-shrink-0 shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:border-blue-500/30">
+                          <div className="text-blue-600 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
+                            {renderIcon(tool.logo, "h-10 w-10 sm:h-12 sm:w-12")}
                           </div>
-                          <div>
-                            <h3 className="font-bold text-base text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors" style={{ color: themeSettings.primaryColor }}>{tool.name}</h3>
-                            <span className="text-xs font-semibold text-gray-400 dark:text-gray-400">
+                          <div className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md border-2 border-white dark:border-gray-950">
+                            <Check className="h-3 w-3 stroke-[3px]" />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1 min-w-0 flex-1">
+                          <h3 className="font-extrabold text-base text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors leading-tight truncate">
+                            {tool.name}
+                          </h3>
+                          
+                          {/* Rating Stars & Value */}
+                          <div className="flex items-center space-x-1.5">
+                            <div className="flex items-center">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star 
+                                  key={star} 
+                                  className={`h-3.5 w-3.5 ${star <= Math.round(tool.rating) ? 'fill-current text-yellow-500' : 'text-gray-200 dark:text-gray-700'}`} 
+                                />
+                              ))}
+                            </div>
+                            <span className="text-xs text-gray-550 dark:text-gray-400 font-bold">
+                              ({tool.rating})
+                            </span>
+                          </div>
+
+                          <div className="pt-0.5">
+                            <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
                               {categories.find(c => c.id === tool.categoryId)?.name || 'AI Insight'}
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center rounded-lg bg-yellow-50 px-2.5 py-1 text-xs font-bold text-yellow-600 dark:bg-yellow-950/30">
-                          <Star className="h-3.5 w-3.5 fill-current text-yellow-500 mr-1" />
-                          {tool.rating}
-                        </div>
                       </div>
 
-                      <p className="text-sm text-gray-500 dark:text-gray-300 line-clamp-3 leading-relaxed">
+                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-3 leading-relaxed">
                         {tool.description}
                       </p>
 
                       <div className="flex flex-wrap gap-1.5 pt-1">
                         {tool.features.slice(0, 3).map((feat, fIdx) => (
-                          <span key={fIdx} className="text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md">
+                          <span key={fIdx} className="text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md">
                             {feat}
                           </span>
                         ))}
@@ -862,7 +894,7 @@ export const ReaderView: React.FC = () => {
                     </div>
 
                     <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                      <span className="text-xs font-bold tracking-widest text-gray-400 uppercase">
+                      <span className="text-xs font-extrabold tracking-widest text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20 px-2.5 py-1 rounded-md uppercase">
                         {tool.pricing}
                       </span>
                       <button
@@ -1056,22 +1088,26 @@ export const ReaderView: React.FC = () => {
             
             {/* 1. HERO SECTION (Only on Homepage turn 1 without categories/tags/searches) */}
             {!selectedCategoryId && !activeTag && !searchQuery && (
-              <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-gradient-to-br from-blue-50/40 via-white to-transparent p-6 sm:p-8 rounded-3xl border border-gray-100 dark:from-gray-900/10 dark:to-transparent dark:border-gray-900">
-                <div className="lg:col-span-5 space-y-6">
-                  <div className="inline-flex items-center space-x-2 rounded-full border border-blue-100 bg-blue-50/50 px-3 py-1 text-xs font-bold text-blue-600 dark:border-blue-900/30 dark:bg-blue-950/20 dark:text-blue-400">
-                    <Sparkles className="h-3.5 w-3.5 animate-pulse" />
+              <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-[#0a0f1d] text-white p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden">
+                {/* Decorative glowing background gradients */}
+                <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-gradient-to-br from-indigo-600/5 to-cyan-600/5 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="lg:col-span-5 space-y-6 relative z-10">
+                  <div className="inline-flex items-center space-x-2 rounded-full border border-slate-800 bg-slate-900/80 px-3 py-1 text-xs font-bold text-slate-300">
+                    <Sparkles className="h-3.5 w-3.5 text-blue-400 animate-pulse" />
                     <span>The Curated AI Tools Directory</span>
                   </div>
-                  <h1 className={`${fontHeadingClass} text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight`}>
-                    Discover the <span className="text-blue-600" style={{ color: themeSettings.primaryColor }}>Best AI Tools</span> for Every Task.
+                  <h1 className={`${fontHeadingClass} text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight`}>
+                    Discover the <span style={{ color: themeSettings.isDarkMode ? themeSettings.primaryColor : themeSettings.accentColor }}>Best AI Tools</span> for Every Task.
                   </h1>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+                  <p className="text-sm text-slate-300 leading-relaxed">
                     Expert evaluations, performance benchmarks, and deep coding guides mapping out the leading artificial intelligence platforms.
                   </p>
                   <div className="flex flex-wrap gap-3">
                     <button
                       onClick={() => setSelectedCategoryId('all-tools')}
-                      className="rounded-xl px-5 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md shadow-blue-500/10"
+                      className="rounded-xl px-5 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-md shadow-blue-500/15"
                       style={{ backgroundColor: themeSettings.primaryColor }}
                     >
                       Explore Tools
@@ -1081,7 +1117,7 @@ export const ReaderView: React.FC = () => {
                         const latestSec = document.getElementById('latest-posts');
                         latestSec?.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      className="rounded-xl border border-gray-200 px-5 py-3 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+                      className="rounded-xl border border-slate-800 bg-slate-900/60 px-5 py-3 text-sm font-semibold text-slate-200 hover:bg-slate-900 transition-all"
                     >
                       Latest Articles
                     </button>
@@ -1092,30 +1128,30 @@ export const ReaderView: React.FC = () => {
                 {featuredPost && (
                   <div 
                     onClick={() => setSelectedPostId(featuredPost.id)}
-                    className="lg:col-span-7 group cursor-pointer overflow-hidden rounded-3xl border border-gray-200 bg-white dark:border-gray-800/80 dark:bg-gray-900 shadow-sm hover:shadow-md transition-all"
+                    className="lg:col-span-7 group cursor-pointer overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/60 shadow-lg transition-all relative z-10"
                   >
                     <div className="relative aspect-video overflow-hidden h-64 sm:h-80">
                       <img 
                         src={featuredPost.featuredImage} 
                         alt={featuredPost.title} 
-                        className="w-full h-full object-cover group-hover:scale-101 transition-transform duration-500" 
+                        className="w-full h-full object-cover group-hover:scale-101 transition-transform duration-500 opacity-90 group-hover:opacity-100" 
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute top-4 left-4 rounded-xl bg-blue-600 text-white px-3.5 py-1.5 text-xs font-bold" style={{ backgroundColor: themeSettings.primaryColor }}>
+                      <div className="absolute top-4 left-4 rounded-xl text-white px-3.5 py-1.5 text-xs font-bold" style={{ backgroundColor: themeSettings.primaryColor }}>
                         FEATURED
                       </div>
                     </div>
                     <div className="p-6 space-y-2.5">
-                      <span className="text-xs font-bold text-blue-600 uppercase tracking-widest" style={{ color: themeSettings.primaryColor }}>
+                      <span className="text-xs font-bold uppercase tracking-widest" style={{ color: themeSettings.isDarkMode ? themeSettings.primaryColor : themeSettings.accentColor }}>
                         {categories.find(c => c.id === featuredPost.categoryId)?.name || 'AI insight'}
                       </span>
-                      <h2 className={`${fontHeadingClass} text-2xl sm:text-3xl font-extrabold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors`}>
+                      <h2 className={`${fontHeadingClass} text-2xl sm:text-3xl font-extrabold text-white group-hover:text-blue-400 transition-colors`}>
                         {featuredPost.title}
                       </h2>
-                      <p className="text-sm sm:text-base text-gray-400 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                      <p className="text-sm sm:text-base text-slate-300 line-clamp-2 leading-relaxed">
                         {featuredPost.summary}
                       </p>
-                      <div className="flex items-center space-x-4 text-xs sm:text-sm text-gray-400 pt-2 font-semibold">
+                      <div className="flex items-center space-x-4 text-xs sm:text-sm text-slate-400 pt-2 font-semibold">
                         <span className="flex items-center"><User className="h-3.5 w-3.5 mr-1" /> Alexander Sterling</span>
                         <span className="flex items-center"><Calendar className="h-3.5 w-3.5 mr-1" /> {featuredPost.publishDate}</span>
                         <span className="flex items-center"><Clock className="h-3.5 w-3.5 mr-1" /> {featuredPost.readingTime} min</span>
@@ -1164,10 +1200,10 @@ export const ReaderView: React.FC = () => {
                     >
                       <div className="space-y-3">
                         <img src={post.featuredImage} alt={post.title} className="h-36 w-full object-cover rounded-xl" referrerPolicy="no-referrer" />
-                        <span className="text-xs font-extrabold text-blue-600 tracking-wider uppercase" style={{ color: themeSettings.primaryColor }}>
+                        <span className="text-xs font-extrabold tracking-wider uppercase" style={{ color: themeSettings.isDarkMode ? themeSettings.accentColor : themeSettings.primaryColor }}>
                           {categories.find(c => c.id === post.categoryId)?.name || 'AI Insight'}
                         </span>
-                        <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 line-clamp-2" style={{ color: themeSettings.primaryColor }}>{post.title}</h4>
+                        <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 line-clamp-2 transition-colors">{post.title}</h4>
                       </div>
                       <div className="flex items-center justify-between text-xs text-gray-400 pt-3 border-t border-gray-50 dark:border-gray-800 mt-2">
                         <span>{post.publishDate}</span>
@@ -1202,11 +1238,11 @@ export const ReaderView: React.FC = () => {
                           : 'border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900'
                       }`}
                     >
-                      <div className="mx-auto h-12 w-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/40 dark:text-blue-400 mb-3" style={{ color: themeSettings.primaryColor }}>
-                        {renderIcon(cat.icon, "h-6 w-6")}
+                      <div className="mx-auto h-16 w-16 rounded-2xl bg-slate-900 text-blue-400 flex items-center justify-center mb-3 shadow-inner border border-slate-800/80">
+                        {renderIcon(cat.icon, "h-8 w-8 text-blue-400")}
                       </div>
                       <h4 className="text-sm font-bold text-gray-900 dark:text-white truncate">{cat.name}</h4>
-                      <span className="text-xs text-gray-400 font-semibold">{count} Premium Tools</span>
+                      <span className="text-xs text-gray-550 dark:text-gray-400 font-semibold">{count} Premium Tools</span>
                     </div>
                   );
                 })}
@@ -1242,36 +1278,60 @@ export const ReaderView: React.FC = () => {
                         <div 
                           key={tool.id}
                           onClick={() => setSelectedToolId(tool.id)}
-                          className="group cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 hover:shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between"
+                          className="group cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 hover:shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between animate-in fade-in duration-300"
                         >
                           <div className="space-y-3">
-                            <div className="flex justify-between items-start">
-                              <div className="flex items-center space-x-3">
-                                <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/40 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
-                                  {renderIcon(tool.logo, "h-5.5 w-5.5")}
+                            <div className="flex items-start space-x-4">
+                              {/* Large, Beautiful Tool Icon with Verified Badge */}
+                              <div className="relative h-16 w-16 rounded-2xl border border-gray-200 bg-white p-2.5 flex items-center justify-center dark:bg-gray-800 dark:border-gray-700 flex-shrink-0 shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:border-blue-500/30">
+                                <div className="text-blue-600 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
+                                  {renderIcon(tool.logo, "h-10 w-10")}
                                 </div>
-                                <div>
-                                  <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors" style={{ color: themeSettings.primaryColor }}>{tool.name}</h4>
-                                  <span className="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded font-semibold">{tool.subcategory}</span>
+                                <div className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md border-2 border-white dark:border-gray-950">
+                                  <Check className="h-2.5 w-2.5 stroke-[3px]" />
                                 </div>
                               </div>
-                              <div className="flex items-center rounded-lg bg-yellow-50 px-2 py-0.5 text-[10px] font-bold text-yellow-600 dark:bg-yellow-950/30">
-                                <Star className="h-3 w-3 fill-current text-yellow-500 mr-1" />
-                                {tool.rating}
+
+                              <div className="space-y-1 min-w-0 flex-1">
+                                <h4 className="font-extrabold text-sm text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors leading-tight truncate">
+                                  {tool.name}
+                                </h4>
+                                
+                                {/* Rating Stars & Value */}
+                                <div className="flex items-center space-x-1.5">
+                                  <div className="flex items-center">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                      <Star 
+                                        key={star} 
+                                        className={`h-3 w-3 ${star <= Math.round(tool.rating) ? 'fill-current text-yellow-500' : 'text-gray-200 dark:text-gray-700'}`} 
+                                      />
+                                    ))}
+                                  </div>
+                                  <span className="text-[10px] text-gray-550 dark:text-gray-400 font-bold">
+                                    ({tool.rating})
+                                  </span>
+                                </div>
+
+                                <div className="pt-0.5">
+                                  <span className="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-1.5 py-0.5 rounded font-semibold">
+                                    {tool.subcategory}
+                                  </span>
+                                </div>
                               </div>
                             </div>
-                            <p className="text-[11px] text-gray-400 line-clamp-2 leading-relaxed">{tool.description}</p>
+
+                            <p className="text-[11px] text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">{tool.description}</p>
                             <div className="flex flex-wrap gap-1">
                               {tool.features.slice(0, 3).map((feat, fIdx) => (
-                                <span key={fIdx} className="text-[9px] font-semibold bg-gray-55 dark:bg-gray-800 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">
+                                <span key={fIdx} className="text-[9px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
                                   {feat}
                                 </span>
                               ))}
                             </div>
                           </div>
                           
-                          <div className="flex items-center justify-between text-[10px] text-gray-400 pt-3 border-t border-gray-50 dark:border-gray-800 mt-4 font-bold uppercase tracking-wider">
-                            <span className="text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 px-2 py-0.5 rounded">{tool.pricing}</span>
+                          <div className="flex items-center justify-between text-[10px] text-gray-550 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-800 mt-4 font-bold uppercase tracking-wider">
+                            <span className="text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 px-2 py-0.5 rounded uppercase font-bold">{tool.pricing}</span>
                             <span className="text-blue-600 group-hover:underline dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>Full Review</span>
                           </div>
                         </div>
@@ -1311,13 +1371,13 @@ export const ReaderView: React.FC = () => {
                                 <h4 className="text-base font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors line-clamp-2" style={{ color: themeSettings.primaryColor }}>
                                   {post.title}
                                 </h4>
-                                <p className="text-sm text-gray-400 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                                <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
                                   {post.summary}
                                 </p>
                               </div>
                             </div>
 
-                            <div className="p-5 pt-0 mt-2 flex items-center justify-between text-xs text-gray-400 border-t border-gray-50/50 dark:border-gray-800 pt-3">
+                            <div className="p-5 pt-0 mt-2 flex items-center justify-between text-xs text-gray-550 dark:text-gray-400 border-t border-gray-100 dark:border-gray-800 pt-3">
                               <span className="flex items-center"><User className="h-3.5 w-3.5 mr-1" /> {author?.name || 'Staff'}</span>
                               <span className="flex items-center"><Clock className="h-3.5 w-3.5 mr-1" /> {post.readingTime} min</span>
                             </div>
@@ -1351,14 +1411,14 @@ export const ReaderView: React.FC = () => {
                       {/* Category Header */}
                       <div className="rounded-3xl bg-gradient-to-br from-blue-50/30 to-transparent border border-gray-150 p-6 sm:p-8 dark:from-gray-900/20 dark:border-gray-800/80 space-y-3">
                         <div className="flex items-center space-x-3">
-                          <div className="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/40 dark:text-blue-400 animate-bounce" style={{ color: themeSettings.primaryColor }}>
-                            {categoryObj && renderIcon(categoryObj.icon, "h-6 w-6")}
+                          <div className="h-16 w-16 rounded-2xl bg-slate-900 text-blue-400 flex items-center justify-center border border-slate-800 animate-bounce flex-shrink-0">
+                            {categoryObj && renderIcon(categoryObj.icon, "h-9 w-9 text-blue-400")}
                           </div>
                           <h1 className={`${fontHeadingClass} text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white`}>
                             {categoryObj?.name}
                           </h1>
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 max-w-3xl leading-relaxed">
+                        <p className="text-sm text-gray-650 dark:text-gray-300 max-w-3xl leading-relaxed">
                           {categoryObj?.description}
                         </p>
                       </div>
@@ -1372,7 +1432,7 @@ export const ReaderView: React.FC = () => {
                                 <span className="w-2.5 h-2.5 rounded-full mr-2.5 bg-blue-600 animate-pulse" style={{ backgroundColor: themeSettings.primaryColor }} />
                                 {subName}
                               </h3>
-                              <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 rounded-full font-semibold">
+                              <span className="text-xs text-gray-600 bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 rounded-full font-semibold">
                                 {toolsBySubcategory[subName].length} Tools
                               </span>
                             </div>
@@ -1382,36 +1442,60 @@ export const ReaderView: React.FC = () => {
                                 <div 
                                   key={tool.id}
                                   onClick={() => setSelectedToolId(tool.id)}
-                                  className="group cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 hover:shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between"
+                                  className="group cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 hover:shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between animate-in fade-in duration-300"
                                 >
                                   <div className="space-y-3">
-                                    <div className="flex justify-between items-start">
-                                      <div className="flex items-center space-x-3">
-                                        <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/40 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
-                                          {renderIcon(tool.logo, "h-5.5 w-5.5")}
+                                    <div className="flex items-start space-x-4">
+                                      {/* Large, Beautiful Tool Icon with Verified Badge */}
+                                      <div className="relative h-16 w-16 rounded-2xl border border-gray-200 bg-white p-2.5 flex items-center justify-center dark:bg-gray-800 dark:border-gray-700 flex-shrink-0 shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:border-blue-500/30">
+                                        <div className="text-blue-600 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
+                                          {renderIcon(tool.logo, "h-10 w-10")}
                                         </div>
-                                        <div>
-                                          <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors" style={{ color: themeSettings.primaryColor }}>{tool.name}</h4>
-                                          <span className="text-[10px] text-gray-400 font-semibold">{tool.subcategory}</span>
+                                        <div className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md border-2 border-white dark:border-gray-950">
+                                          <Check className="h-2.5 w-2.5 stroke-[3px]" />
                                         </div>
                                       </div>
-                                      <div className="flex items-center rounded-lg bg-yellow-50 px-2 py-0.5 text-[10px] font-bold text-yellow-600 dark:bg-yellow-950/30">
-                                        <Star className="h-3 w-3 fill-current text-yellow-500 mr-1" />
-                                        {tool.rating}
+
+                                      <div className="space-y-1 min-w-0 flex-1">
+                                        <h4 className="font-extrabold text-sm text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors leading-tight truncate">
+                                          {tool.name}
+                                        </h4>
+                                        
+                                        {/* Rating Stars & Value */}
+                                        <div className="flex items-center space-x-1.5">
+                                          <div className="flex items-center">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                              <Star 
+                                                key={star} 
+                                                className={`h-3 w-3 ${star <= Math.round(tool.rating) ? 'fill-current text-yellow-500' : 'text-gray-200 dark:text-gray-700'}`} 
+                                              />
+                                            ))}
+                                          </div>
+                                          <span className="text-[10px] text-gray-550 dark:text-gray-400 font-bold">
+                                            ({tool.rating})
+                                          </span>
+                                        </div>
+
+                                        <div className="pt-0.5">
+                                          <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
+                                            {tool.subcategory}
+                                          </span>
+                                        </div>
                                       </div>
                                     </div>
-                                    <p className="text-[11px] text-gray-400 line-clamp-2 leading-relaxed">{tool.description}</p>
+
+                                    <p className="text-[11px] text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">{tool.description}</p>
                                     <div className="flex flex-wrap gap-1">
                                       {tool.features.slice(0, 3).map((feat, fIdx) => (
-                                        <span key={fIdx} className="text-[9px] font-semibold bg-gray-55 dark:bg-gray-800 text-gray-500 dark:text-gray-300 px-2 py-0.5 rounded">
+                                        <span key={fIdx} className="text-[9px] font-semibold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">
                                           {feat}
                                         </span>
                                       ))}
                                     </div>
                                   </div>
                                   
-                                  <div className="flex items-center justify-between text-[10px] text-gray-400 pt-3 border-t border-gray-50 dark:border-gray-800 mt-4 font-bold uppercase tracking-wider">
-                                    <span className="text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 px-2 py-0.5 rounded">{tool.pricing}</span>
+                                  <div className="flex items-center justify-between text-[10px] text-gray-550 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-800 mt-4 font-bold uppercase tracking-wider">
+                                    <span className="text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30 px-2 py-0.5 rounded uppercase font-bold">{tool.pricing}</span>
                                     <span className="text-blue-600 group-hover:underline dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>Read Review</span>
                                   </div>
                                 </div>
@@ -1452,13 +1536,13 @@ export const ReaderView: React.FC = () => {
                                       <h4 className="text-base font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors line-clamp-2" style={{ color: themeSettings.primaryColor }}>
                                         {post.title}
                                       </h4>
-                                      <p className="text-sm text-gray-400 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
                                         {post.summary}
                                       </p>
                                     </div>
                                   </div>
 
-                                  <div className="p-5 pt-0 mt-2 flex items-center justify-between text-xs text-gray-400 border-t border-gray-50/50 dark:border-gray-800 pt-3">
+                                  <div className="p-5 pt-0 mt-2 flex items-center justify-between text-xs text-gray-550 dark:text-gray-400 border-t border-gray-100 dark:border-gray-800 pt-3">
                                     <span className="flex items-center"><User className="h-3.5 w-3.5 mr-1" /> {author?.name || 'Staff'}</span>
                                     <span className="flex items-center"><Clock className="h-3.5 w-3.5 mr-1" /> {post.readingTime} min</span>
                                   </div>
@@ -1502,13 +1586,13 @@ export const ReaderView: React.FC = () => {
                               <h4 className="text-base font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors line-clamp-2" style={{ color: themeSettings.primaryColor }}>
                                 {post.title}
                               </h4>
-                              <p className="text-sm text-gray-400 dark:text-gray-300 line-clamp-2 leading-relaxed">
+                              <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
                                 {post.summary}
                               </p>
                             </div>
                           </div>
 
-                          <div className="p-5 pt-0 mt-2 flex items-center justify-between text-xs text-gray-400 border-t border-gray-50/50 dark:border-gray-800 pt-3">
+                          <div className="p-5 pt-0 mt-2 flex items-center justify-between text-xs text-gray-550 dark:text-gray-400 border-t border-gray-100 dark:border-gray-800 pt-3">
                             <span className="flex items-center"><User className="h-3.5 w-3.5 mr-1" /> {author?.name || 'Staff'}</span>
                             <span className="flex items-center"><Clock className="h-3.5 w-3.5 mr-1" /> {post.readingTime} min</span>
                           </div>
@@ -1554,24 +1638,53 @@ export const ReaderView: React.FC = () => {
                   <div 
                     key={tool.id}
                     onClick={() => setSelectedToolId(tool.id)}
-                    className="group cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 hover:shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between"
+                    className="group cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 hover:shadow-md transition-all dark:border-gray-800 dark:bg-gray-900 flex flex-col justify-between animate-in fade-in duration-300"
                   >
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-start">
-                        <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center dark:bg-blue-950/40 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
-                          {renderIcon(tool.logo, "h-5.5 w-5.5")}
+                    <div className="space-y-3">
+                      <div className="flex items-start space-x-4">
+                        {/* Large, Beautiful Tool Icon with Verified Badge */}
+                        <div className="relative h-16 w-16 rounded-2xl border border-gray-200 bg-white p-2.5 flex items-center justify-center dark:bg-gray-800 dark:border-gray-700 flex-shrink-0 shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:border-blue-500/30">
+                          <div className="text-blue-600 dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>
+                            {renderIcon(tool.logo, "h-10 w-10")}
+                          </div>
+                          <div className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md border-2 border-white dark:border-gray-950">
+                            <Check className="h-2.5 w-2.5 stroke-[3px]" />
+                          </div>
                         </div>
-                        <div className="flex items-center rounded-lg bg-yellow-50 px-2 py-0.5 text-[10px] font-bold text-yellow-600">
-                          <Star className="h-3 w-3 fill-current text-yellow-500 mr-1" />
-                          {tool.rating}
+
+                        <div className="space-y-1 min-w-0 flex-1">
+                          <h4 className="font-extrabold text-sm text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 transition-colors leading-tight truncate">
+                            {tool.name}
+                          </h4>
+                          
+                          {/* Rating Stars & Value */}
+                          <div className="flex items-center space-x-1.5">
+                            <div className="flex items-center">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Star 
+                                  key={star} 
+                                  className={`h-3 w-3 ${star <= Math.round(tool.rating) ? 'fill-current text-yellow-500' : 'text-gray-200 dark:text-gray-700'}`} 
+                                />
+                              ))}
+                            </div>
+                            <span className="text-[10px] text-gray-550 dark:text-gray-400 font-bold">
+                              ({tool.rating})
+                            </span>
+                          </div>
+
+                          <div className="pt-0.5">
+                            <span className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
+                              {categories.find(c => c.id === tool.categoryId)?.name || 'AI Listing'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <h4 className="text-sm font-bold text-gray-900 group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400 mt-2" style={{ color: themeSettings.primaryColor }}>{tool.name}</h4>
-                      <p className="text-[11px] text-gray-400 line-clamp-2 leading-relaxed">{tool.description}</p>
+
+                      <p className="text-[11px] text-gray-650 dark:text-gray-300 line-clamp-2 leading-relaxed">{tool.description}</p>
                     </div>
                     
-                    <div className="flex items-center justify-between text-[10px] text-gray-400 pt-3 border-t border-gray-50 dark:border-gray-800 mt-4 font-bold uppercase tracking-wider">
-                      <span>{tool.pricing}</span>
+                    <div className="flex items-center justify-between text-[10px] text-gray-550 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-800 mt-4 font-bold uppercase tracking-wider">
+                      <span className="text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/20 px-2.5 py-1 rounded-md uppercase font-bold">{tool.pricing}</span>
                       <span className="text-blue-600 group-hover:underline dark:text-blue-400" style={{ color: themeSettings.primaryColor }}>Review</span>
                     </div>
                   </div>

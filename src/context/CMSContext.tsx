@@ -19,6 +19,8 @@ interface CMSContextType {
   // Navigation / Mode state
   isAdminMode: boolean;
   setIsAdminMode: (mode: boolean) => void;
+  isAdminAuthorized: boolean;
+  setIsAdminAuthorized: (authorized: boolean) => void;
   currentAdminView: string;
   setCurrentAdminView: (view: string) => void;
   selectedPostId: string | null;
@@ -94,8 +96,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           localStorage.setItem('ai_inventory_db', JSON.stringify(fresh));
           return fresh;
         }
-        // Automatically upgrade to modern Sleek Interface dark theme default if using legacy light mode defaults
-        if (parsed.themeSettings && (parsed.themeSettings.primaryColor === '#0052FF' || !parsed.themeSettings.isDarkMode)) {
+        // Automatically upgrade to modern Sleek Interface dark theme default if using legacy defaults
+        if (parsed.themeSettings && parsed.themeSettings.primaryColor === '#0052FF') {
           parsed.themeSettings = {
             primaryColor: '#3B82F6',
             secondaryColor: '#020617',
@@ -108,6 +110,42 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             isDarkMode: true
           };
           localStorage.setItem('ai_inventory_db', JSON.stringify(parsed));
+        }
+
+        // Seamlessly upgrade category names and icons for existing database records to beautiful professional options
+        if (parsed.categories && Array.isArray(parsed.categories)) {
+          let updated = false;
+          parsed.categories = parsed.categories.map((cat: any) => {
+            if (cat.id === 'cat-image') {
+              if (cat.icon !== 'Paintbrush') {
+                cat.icon = 'Paintbrush';
+                updated = true;
+              }
+            }
+            if (cat.id === 'cat-coding') {
+              if (cat.icon !== 'Code') {
+                cat.icon = 'Code';
+                updated = true;
+              }
+            }
+            if (cat.id === 'cat-video') {
+              if (cat.icon !== 'Video') {
+                cat.icon = 'Video';
+                updated = true;
+              }
+            }
+            if (cat.id === 'cat-business') {
+              if (cat.icon !== 'PenTool' || cat.name !== 'AI Writing & Business') {
+                cat.icon = 'PenTool';
+                cat.name = 'AI Writing & Business';
+                updated = true;
+              }
+            }
+            return cat;
+          });
+          if (updated) {
+            localStorage.setItem('ai_inventory_db', JSON.stringify(parsed));
+          }
         }
         return parsed;
       } catch (e) {
@@ -152,6 +190,9 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
   
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isAdminAuthorized, setIsAdminAuthorized] = useState(() => {
+    return localStorage.getItem('ai_inventory_admin_authorized') === 'true';
+  });
   const [currentAdminView, setCurrentAdminView] = useState('dashboard');
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [selectedToolId, setSelectedToolId] = useState<string | null>(null);
@@ -206,6 +247,18 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Apply primary/accent colors dynamically as tailwind variables or custom styles
     root.style.setProperty('--primary-color', themeSettings.primaryColor);
     root.style.setProperty('--accent-color', themeSettings.accentColor);
+    
+    // Dynamically apply fonts to CSS variables
+    const fontSansValue = themeSettings.fontSans === 'Playfair Display' 
+      ? '"Playfair Display", Georgia, serif' 
+      : (themeSettings.fontSans === 'JetBrains Mono' ? '"JetBrains Mono", monospace' : '"Inter", sans-serif');
+      
+    const fontHeadingValue = themeSettings.fontHeading === 'Playfair Display' 
+      ? '"Playfair Display", Georgia, serif' 
+      : (themeSettings.fontHeading === 'Inter' ? '"Inter", sans-serif' : '"Space Grotesk", sans-serif');
+
+    root.style.setProperty('--font-sans', fontSansValue);
+    root.style.setProperty('--font-heading', fontHeadingValue);
     
     // Toggle HTML dark class
     if (themeSettings.isDarkMode) {
@@ -499,6 +552,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       recentlyViewed,
       isAdminMode,
       setIsAdminMode,
+      isAdminAuthorized,
+      setIsAdminAuthorized,
       currentAdminView,
       setCurrentAdminView,
       selectedPostId,

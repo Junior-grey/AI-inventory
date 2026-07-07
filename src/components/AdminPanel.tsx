@@ -51,13 +51,14 @@ export const AdminPanel: React.FC = () => {
     currentAdminView,
     setCurrentAdminView,
     updateRolePermissions,
-    setIsAdminMode
+    setIsAdminMode,
+    isAdminAuthorized,
+    setIsAdminAuthorized
   } = useCMS();
 
-  // Private Administrative Authentication Gate States
-  const [isAuthorized, setIsAuthorized] = useState(() => {
-    return localStorage.getItem('ai_inventory_admin_authorized') === 'true';
-  });
+  // Private Administrative Authentication Gate States mapped from global context
+  const isAuthorized = isAdminAuthorized;
+  const setIsAuthorized = setIsAdminAuthorized;
   const [authEmail, setAuthEmail] = useState('christiannashon@gmail.com');
   const [authPassword, setAuthPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -2199,16 +2200,206 @@ DESCRIPTION: Compelling meta text...`;
         {/* ========================================================
             SUB-PANEL 8: THEME & FONTS CUSTOMIZER
             ======================================================== */}
-        {currentAdminView === 'themes' && (
-          <div className="space-y-6 animate-in fade-in duration-200">
-            <div>
-              <h1 className="font-heading text-2xl font-extrabold text-gray-900 dark:text-white">Site Appearance Customizer</h1>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Design the primary UI identity. Changes reflect instantly over reader views.</p>
-            </div>
+        {currentAdminView === 'themes' && (() => {
+          const themePresets = [
+            {
+              id: "sleek-dark",
+              name: "Sleek Dark Slate",
+              description: "Default cosmic indigo & slate canvas",
+              isDarkMode: true,
+              settings: {
+                primaryColor: '#3B82F6',
+                secondaryColor: '#020617',
+                accentColor: '#60A5FA',
+                bgStyle: 'slate' as const,
+                fontSans: 'Inter',
+                fontHeading: 'Space Grotesk',
+                borderRadius: 'rounded-2xl',
+                cardStyle: 'glass' as const,
+                isDarkMode: true
+              }
+            },
+            {
+              id: "pure-light",
+              name: "Pure Light Ivory",
+              description: "Crisp white background with royal indigo and active focus",
+              isDarkMode: false,
+              settings: {
+                primaryColor: '#4F46E5',
+                secondaryColor: '#F8FAFC',
+                accentColor: '#818CF8',
+                bgStyle: 'white' as const,
+                fontSans: 'Inter',
+                fontHeading: 'Space Grotesk',
+                borderRadius: 'rounded-2xl',
+                cardStyle: 'bordered' as const,
+                isDarkMode: false
+              }
+            },
+            {
+              id: "warm-oatmeal",
+              name: "Subtle Warm Oatmeal",
+              description: "Charcoal gray with cozy warm cream & golden amber",
+              isDarkMode: false,
+              settings: {
+                primaryColor: '#0F172A',
+                secondaryColor: '#FAF8F5',
+                accentColor: '#D97706',
+                bgStyle: 'slate' as const,
+                fontSans: 'Inter',
+                fontHeading: 'Inter',
+                borderRadius: 'rounded-xl',
+                cardStyle: 'bordered' as const,
+                isDarkMode: false
+              }
+            },
+            {
+              id: "emerald-garden",
+              name: "Emerald Garden",
+              description: "Lively forest green accents and fresh white backgrounds",
+              isDarkMode: false,
+              settings: {
+                primaryColor: '#059669',
+                secondaryColor: '#ECFDF5',
+                accentColor: '#10B981',
+                bgStyle: 'white' as const,
+                fontSans: 'Inter',
+                fontHeading: 'Space Grotesk',
+                borderRadius: 'rounded-2xl',
+                cardStyle: 'default' as const,
+                isDarkMode: false
+              }
+            },
+            {
+              id: "editorial-serif",
+              name: "Editorial Serif",
+              description: "High-contrast serif typeface and premium ivory paper layout",
+              isDarkMode: false,
+              settings: {
+                primaryColor: '#991B1B',
+                secondaryColor: '#FFFDF9',
+                accentColor: '#D97706',
+                bgStyle: 'white' as const,
+                fontSans: 'Playfair Display',
+                fontHeading: 'Playfair Display',
+                borderRadius: 'rounded-md',
+                cardStyle: 'bordered' as const,
+                isDarkMode: false
+              }
+            },
+            {
+              id: "cyber-cyan",
+              name: "Cyber Cyan Matrix",
+              description: "Futuristic slate dark mode with neon cyan highlights",
+              isDarkMode: true,
+              settings: {
+                primaryColor: '#06B6D4',
+                secondaryColor: '#083344',
+                accentColor: '#22D3EE',
+                bgStyle: 'dark' as const,
+                fontSans: 'JetBrains Mono',
+                fontHeading: 'Space Grotesk',
+                borderRadius: 'rounded-xl',
+                cardStyle: 'bordered' as const,
+                isDarkMode: true
+              }
+            }
+          ];
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-              {/* Controls Column */}
-              <div className="bg-white border border-gray-200 p-6 sm:p-8 rounded-3xl dark:border-gray-800 dark:bg-gray-900 space-y-5 shadow-sm">
+          return (
+            <div className="space-y-6 animate-in fade-in duration-200">
+              <div>
+                <h1 className="font-heading text-2xl font-extrabold text-gray-900 dark:text-white">Site Appearance Customizer</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Design the primary UI identity. Changes reflect instantly over reader views.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                {/* Controls Column */}
+                <div className="bg-white border border-gray-200 p-6 sm:p-8 rounded-3xl dark:border-gray-800 dark:bg-gray-900 space-y-6 shadow-sm">
+                  
+                  {/* Presets Grid */}
+                  <div className="space-y-3 pb-4 border-b border-gray-100 dark:border-gray-800">
+                    <h3 className="text-xs font-extrabold text-gray-450 uppercase tracking-widest flex items-center gap-1.5 dark:text-gray-400">
+                      <Sparkles className="h-3.5 w-3.5 text-purple-500" />
+                      1-Click Theme Presets
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {themePresets.map((preset) => {
+                        const isActive = 
+                          themeSettings.primaryColor === preset.settings.primaryColor &&
+                          themeSettings.isDarkMode === preset.settings.isDarkMode &&
+                          themeSettings.fontSans === preset.settings.fontSans;
+
+                        return (
+                          <div
+                            key={preset.id}
+                            onClick={() => {
+                              updateTheme(preset.settings);
+                            }}
+                            className={`cursor-pointer rounded-xl border p-3 flex items-start gap-2.5 transition-all text-left ${
+                              isActive
+                                ? 'border-purple-500 bg-purple-500/5 ring-1 ring-purple-500/10'
+                                : 'border-gray-150 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-slate-900/30'
+                            }`}
+                          >
+                            <div 
+                              className="h-7 w-7 rounded-full flex items-center justify-center text-[9px] font-bold border shrink-0 shadow-sm"
+                              style={{ 
+                                backgroundColor: preset.settings.secondaryColor === '#F8FAFC' ? '#FFFFFF' : preset.settings.secondaryColor,
+                                color: preset.settings.primaryColor,
+                                borderColor: preset.settings.primaryColor + '25'
+                              }}
+                            >
+                              Aa
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 justify-between">
+                                <span className="text-xs font-extrabold text-gray-900 dark:text-white truncate">
+                                  {preset.name}
+                                </span>
+                                {preset.isDarkMode ? (
+                                  <span className="text-[8px] bg-gray-800 text-gray-300 px-1 py-0.2 rounded font-black uppercase">Dark</span>
+                                ) : (
+                                  <span className="text-[8px] bg-amber-50 text-amber-700 px-1 py-0.2 rounded font-black uppercase dark:bg-amber-950/40 dark:text-amber-400">Light</span>
+                                )}
+                              </div>
+                              <p className="text-[9px] text-gray-400 truncate mt-0.5">
+                                {preset.description}
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Mode Selector Toggle */}
+                  <div className="space-y-3 pb-4 border-b border-gray-100 dark:border-gray-800">
+                    <h3 className="text-xs font-extrabold text-gray-400 uppercase tracking-widest">Global Theme Mode</h3>
+                    <div className="flex items-center justify-between border border-gray-100 dark:border-gray-800/80 rounded-2xl p-4 bg-gray-50/30 dark:bg-gray-950/10">
+                      <div className="space-y-0.5 pr-4">
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">Active Light/Dark State</span>
+                        <p className="text-[9px] text-gray-400 leading-normal">Force the entire inventory layout to toggle.</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updateTheme({ isDarkMode: !themeSettings.isDarkMode })}
+                        className="flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-all shadow-sm"
+                      >
+                        {themeSettings.isDarkMode ? (
+                          <>
+                            <Icons.Sun className="h-4 w-4 text-amber-500" />
+                            <span>Switch to Light</span>
+                          </>
+                        ) : (
+                          <>
+                            <Icons.Moon className="h-4 w-4 text-indigo-500" />
+                            <span>Switch to Dark</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 
                 {/* Brand Colors */}
                 <div className="space-y-3 pt-1">
@@ -2349,7 +2540,8 @@ DESCRIPTION: Compelling meta text...`;
               </div>
             </div>
           </div>
-        )}
+          );
+        })()}
 
         {/* ========================================================
             SUB-PANEL 9: SEO & REDIRECTS MANAGER

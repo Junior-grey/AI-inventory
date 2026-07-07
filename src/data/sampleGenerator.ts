@@ -40,7 +40,7 @@ export function generateSampleData() {
       name: 'AI Image Tools',
       slug: 'ai-image-tools',
       description: 'Text-to-image generators, design suites, vectorizers, and semantic graphic editors.',
-      icon: 'Palette',
+      icon: 'Paintbrush',
       image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80'
     },
     {
@@ -48,7 +48,7 @@ export function generateSampleData() {
       name: 'AI Coding Tools',
       slug: 'ai-coding-tools',
       description: 'AI code assistants, automated debugging, documentation systems, and code translators.',
-      icon: 'Binary',
+      icon: 'Code',
       image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&auto=format&fit=crop&q=80'
     },
     {
@@ -56,15 +56,15 @@ export function generateSampleData() {
       name: 'AI Video Tools',
       slug: 'ai-video-tools',
       description: 'Neural video synthesizers, text-to-video platforms, automated video editors, and avatars.',
-      icon: 'Clapperboard',
+      icon: 'Video',
       image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&auto=format&fit=crop&q=80'
     },
     {
       id: 'cat-business',
-      name: 'AI Business Tools',
+      name: 'AI Writing & Business',
       slug: 'ai-business-tools',
       description: 'AI writing assistants, RPA integrations, intelligent automation, and productivity assistants.',
-      icon: 'Briefcase',
+      icon: 'PenTool',
       image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80'
     }
   ];
@@ -1325,6 +1325,130 @@ export function generateSampleData() {
       cons: ['Longer articles require manual outline expansion', 'Tone adjustments can feel exaggerated']
     }
   ];
+
+  // Dynamically pad each category to have 55+ tools
+  const targetCountPerCategory = 55;
+  const existingCounts: Record<string, number> = {};
+  
+  // Initialize existing counts
+  categories.forEach(cat => {
+    existingCounts[cat.id] = 0;
+  });
+  
+  // Count current tools
+  aiTools.forEach(tool => {
+    if (existingCounts[tool.categoryId] !== undefined) {
+      existingCounts[tool.categoryId]++;
+    }
+  });
+
+  // Generator dictionaries per category to create extremely realistic tool names and descriptions
+  const genData: Record<string, {
+    subcategories: string[];
+    prefixes: string[];
+    suffixes: string[];
+    features: string[];
+    pros: string[];
+    cons: string[];
+    domains: string[];
+  }> = {
+    'cat-image': {
+      subcategories: ['Image Generators', 'Design Generators', 'Text to Image', 'AI Art Editors', 'Style Mimic'],
+      prefixes: ['Pixel', 'Art', 'Canvas', 'Draft', 'Synth', 'Dream', 'Viz', 'Render', 'Vector', 'Graphic', 'Sketch', 'Illusion', 'Prism', 'Vision', 'Nova', 'Spectra', 'Imago', 'Chroma', 'Aura', 'Optic'],
+      suffixes: ['AI', 'Studio', 'Forge', 'Crafter', 'Flow', 'Engine', 'Lab', 'Space', 'Grid', 'Mind', 'Pro', 'X', 'Hub', 'Gen', 'Craft', 'Ink', 'Wave', 'Portal', 'Matrix'],
+      features: ['High-res upscale', 'Consistent characters and styles', 'Prompt blending', 'ControlNet guiding', 'Vector SVG download', 'Inpainting & outpainting', 'Object remover brush', 'Aspect ratio variations'],
+      pros: ['Saves hours of manual clipping', 'Stunning photorealistic lighting', 'Highly customizable configurations', 'Vibrant color palettes', 'Amazing detail rendering'],
+      cons: ['Requires powerful GPU for local hosting', 'Subscription pricing can be expensive', 'Occasional hand and finger distortion', 'Free tier has a low resolution ceiling', 'Watermarked export files on free plans'],
+      domains: ['midjourney.com', 'stability.ai', 'openai.com', 'canva.com', 'photoroom.com', 'leonardo.ai', 'adobe.com', 'krea.ai', 'recraft.ai', 'magnific.ai']
+    },
+    'cat-coding': {
+      subcategories: ['Code Assistants', 'Design Builders', 'Automated Debugging', 'API Co-Pilots', 'Documentation Writers'],
+      prefixes: ['Code', 'Dev', 'Syntax', 'Stack', 'Compiler', 'Debug', 'Script', 'Auto', 'Git', 'Repo', 'Engine', 'Cyber', 'Byte', 'Logic', 'Node', 'Kern', 'Thread', 'Array', 'Bit'],
+      suffixes: ['Pilot', 'Bot', 'Agent', 'Helper', 'Wiz', 'Pro', 'Sense', 'Mind', 'Link', 'Forge', 'Draft', 'Craft', 'Flow', 'Studio', 'Naut', 'Doc', 'Build', 'Pack', 'Core'],
+      features: ['Autoclose brackets', 'Variable tracing', 'Explain code inline', 'Automated Jest testing', 'Docker config generator', 'Multi-file code context search', 'Performance optimization metrics', 'Git workflow pipeline helper'],
+      pros: ['Saves hours of typing', 'Perfect context comprehension', 'Very low latency suggestions', 'Excellent documentation lookups', 'Easy command-line integrations'],
+      cons: ['Occasionally suggests deprecated library versions', 'Can be resource-heavy during indexing', 'Requires active internet for high-end queries', 'Fewer visual UI mockups for legacy frameworks', 'Occasional hallucination on newer beta frameworks'],
+      domains: ['v0.dev', 'bolt.new', 'github.com', 'cursor.sh', 'phind.com', 'tabnine.com', 'amazon.com', 'sourcegraph.com', 'replit.com', 'lovable.dev']
+    },
+    'cat-video': {
+      subcategories: ['Video Generators', 'AI Avatars', 'Cinematic Editors', 'Motion Simulators', 'Audio-to-Video Sync'],
+      prefixes: ['Motion', 'Film', 'Clip', 'Frame', 'Scene', 'Sora', 'Run', 'Pika', 'Cine', 'Director', 'Tele', 'Screen', 'Avatar', 'Voice', 'Optimus', 'Anima', 'Cast', 'Vid', 'Chronos'],
+      suffixes: ['Synth', 'Flow', 'Lab', 'Engine', 'Pro', 'Studio', 'Agent', 'Maker', 'Forge', 'Mind', 'X', 'Gen', 'Wave', 'Cut', 'Track', 'Render', 'Scope', 'Lens', 'Show'],
+      features: ['Fluid 60fps movement', 'Real-time lip sync', 'Voice-clone overlays', 'Camera pan controls', 'Sound sync triggers', 'Coherent scene dynamics', 'Automated transcript subtitle builder', 'Background noise removal'],
+      pros: ['Cinema-grade photorealism', 'Saves massive studio camera costs', 'Excellent localized translation', 'Immaculate talking heads presenting', 'Easy editing via text transcript'],
+      cons: ['High resolution rendering is credit-heavy', 'Minor artifacts in fast transitions', 'Custom avatar modeling is expensive', 'Can lag during heavy server load', 'Free trial limits clip length to 5 seconds'],
+      domains: ['runwayml.com', 'heygen.com', 'synthesia.io', 'lumalabs.ai', 'descript.com', 'pika.art', 'klingai.com', 'suno.com', 'elevenlabs.io', 'viggle.ai']
+    },
+    'cat-business': {
+      subcategories: ['AI Copywriters', 'Email Assistants', 'SEO Optimizers', 'Workflow Bots', 'Proposal Generators'],
+      prefixes: ['Write', 'Pen', 'Copy', 'Word', 'Draft', 'Rytr', 'Jasper', 'Text', 'Content', 'Ink', 'Prose', 'Brief', 'Page', 'Log', 'Omni', 'Scribe', 'Note', 'Intel', 'Doc'],
+      suffixes: ['AI', 'Bot', 'Flow', 'Craft', 'Writer', 'Assistant', 'Mind', 'Hub', 'Forge', 'Sense', 'Suite', 'Gen', 'Work', 'Agent', 'Scribbler', 'Graph', 'Desk', 'Zone', 'Sheet'],
+      features: ['Tone matching styles', 'Plagiarism detection check', 'One-click outline builder', 'SEO keyword injector', 'Multi-user sharing workspace', 'Sales automation integration', 'AI brand voice guidelines config', 'Inbuilt grammatical analyzer'],
+      pros: ['Speeds up copywriting 10x', 'Flawless grammar correction', 'Supports over 30 emotional tones', 'Incredibly simple rich text editor', 'Saves thousands on marketing copywriters'],
+      cons: ['Requires human editing for voice nuance', 'Facts must be manually double-checked', 'Content can occasionally feel dry or formulaic', 'High risk of generic keywords stuffing', 'Paid subscription needed for unlimited seat access'],
+      domains: ['rytr.me', 'jasper.ai', 'copy.ai', 'notion.so', 'grammarly.com', 'anyword.com', 'writesonic.com', 'wordtune.com', 'simplified.com', 'quillbot.com']
+    }
+  };
+
+  categories.forEach(cat => {
+    const currentCount = existingCounts[cat.id] || 0;
+    const needed = targetCountPerCategory - currentCount;
+    if (needed > 0) {
+      const data = genData[cat.id] || genData['cat-business'];
+      for (let i = 0; i < needed; i++) {
+        // Deterministic generation based on category & index to make it perfectly stable
+        const prefix = data.prefixes[i % data.prefixes.length];
+        const suffix = data.suffixes[(i * 3) % data.suffixes.length];
+        let name = `${prefix} ${suffix}`;
+        
+        // Ensure name is unique
+        if (aiTools.some(t => t.name.toLowerCase() === name.toLowerCase())) {
+          name = `${prefix} ${suffix} Pro`;
+        }
+        if (aiTools.some(t => t.name.toLowerCase() === name.toLowerCase())) {
+          name = `${prefix}${suffix} AI`;
+        }
+
+        const subcategory = data.subcategories[(i + 2) % data.subcategories.length];
+        const domain = data.domains[i % data.domains.length];
+        const pricingArr: ('free' | 'freemium' | 'paid')[] = ['free', 'freemium', 'paid'];
+        const pricing = pricingArr[i % 3];
+        const rating = parseFloat((4.0 + (i % 10) * 0.1).toFixed(1));
+
+        // Create features, pros, cons subsets
+        const features = [
+          data.features[i % data.features.length],
+          data.features[(i + 2) % data.features.length],
+          data.features[(i + 4) % data.features.length]
+        ];
+        const pros = [
+          data.pros[i % data.pros.length],
+          data.pros[(i + 2) % data.pros.length]
+        ];
+        const cons = [
+          data.cons[i % data.cons.length],
+          data.cons[(i + 2) % data.cons.length]
+        ];
+
+        aiTools.push({
+          id: `tool-gen-${cat.id}-${i}`,
+          name,
+          rating,
+          description: `An advanced ${subcategory.toLowerCase()} powered by deep learning for rapid ${cat.name.toLowerCase().replace('tools', '')} workflows.`,
+          longDescription: `An industry-leading enterprise solution for professionals in ${subcategory.toLowerCase()}. Developed with a state-of-the-art neural engine, this utility delivers ${pros[0].toLowerCase()} with ${features[0].toLowerCase()} capabilities. Easily integrates with standard web APIs and supports team collaboration models.`,
+          logo: `https://www.google.com/s2/favicons?sz=128&domain=${domain}`,
+          url: `https://${domain}`,
+          categoryId: cat.id,
+          subcategory,
+          pricing,
+          features,
+          pros,
+          cons,
+          pricingDetails: pricing === 'free' ? 'Completely free for personal use.' : pricing === 'freemium' ? 'Free tier available, paid plans start at $12/month.' : 'Enterprise trials available upon request. Subscriptions start at $29/month.'
+        });
+      }
+    }
+  });
 
   // 4. Exactly 60 Blog Posts (10 articles per category)
   const posts: Post[] = [];
