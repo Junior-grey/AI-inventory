@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useCMS } from '../context/CMSContext';
 import { 
   Search, Sun, Moon, Menu, X, Cpu, LayoutDashboard, BookOpen, 
-  Settings, Terminal, HelpCircle, Flame, ArrowRight, Star,
-  Palette, Check, Sparkles
+  Settings, Terminal, HelpCircle, Flame, ArrowRight, Star
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
@@ -30,112 +29,6 @@ export const Navigation: React.FC = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [isThemeOpen, setIsThemeOpen] = useState(false);
-
-  const themePresets = [
-    {
-      id: "sleek-dark",
-      name: "Sleek Dark Slate",
-      description: "Default cosmic indigo & slate canvas",
-      isDarkMode: true,
-      settings: {
-        primaryColor: '#3B82F6',
-        secondaryColor: '#020617',
-        accentColor: '#60A5FA',
-        bgStyle: 'slate' as const,
-        fontSans: 'Inter',
-        fontHeading: 'Space Grotesk',
-        borderRadius: 'rounded-2xl',
-        cardStyle: 'glass' as const,
-        isDarkMode: true
-      }
-    },
-    {
-      id: "pure-light",
-      name: "Pure Light Ivory",
-      description: "Crisp white background with royal indigo and active focus",
-      isDarkMode: false,
-      settings: {
-        primaryColor: '#4F46E5', // Indigo
-        secondaryColor: '#F8FAFC',
-        accentColor: '#818CF8',
-        bgStyle: 'white' as const,
-        fontSans: 'Inter',
-        fontHeading: 'Space Grotesk',
-        borderRadius: 'rounded-2xl',
-        cardStyle: 'bordered' as const,
-        isDarkMode: false
-      }
-    },
-    {
-      id: "warm-oatmeal",
-      name: "Subtle Warm Oatmeal",
-      description: "Charcoal gray with cozy warm cream & golden amber",
-      isDarkMode: false,
-      settings: {
-        primaryColor: '#0F172A', // Slate 900
-        secondaryColor: '#FAF8F5', // Cream
-        accentColor: '#D97706', // Amber
-        bgStyle: 'slate' as const,
-        fontSans: 'Inter',
-        fontHeading: 'Inter',
-        borderRadius: 'rounded-xl',
-        cardStyle: 'bordered' as const,
-        isDarkMode: false
-      }
-    },
-    {
-      id: "emerald-garden",
-      name: "Emerald Garden",
-      description: "Lively forest green accents and fresh white backgrounds",
-      isDarkMode: false,
-      settings: {
-        primaryColor: '#059669', // Emerald
-        secondaryColor: '#ECFDF5',
-        accentColor: '#10B981',
-        bgStyle: 'white' as const,
-        fontSans: 'Inter',
-        fontHeading: 'Space Grotesk',
-        borderRadius: 'rounded-2xl',
-        cardStyle: 'default' as const,
-        isDarkMode: false
-      }
-    },
-    {
-      id: "editorial-serif",
-      name: "Editorial Serif",
-      description: "High-contrast serif typeface and premium ivory paper layout",
-      isDarkMode: false,
-      settings: {
-        primaryColor: '#991B1B', // Burgundy
-        secondaryColor: '#FFFDF9', // Paper Ivory
-        accentColor: '#D97706', // Gold
-        bgStyle: 'white' as const,
-        fontSans: 'Playfair Display',
-        fontHeading: 'Playfair Display',
-        borderRadius: 'rounded-md',
-        cardStyle: 'bordered' as const,
-        isDarkMode: false
-      }
-    },
-    {
-      id: "cyber-cyan",
-      name: "Cyber Cyan Matrix",
-      description: "Futuristic slate dark mode with neon cyan highlights",
-      isDarkMode: true,
-      settings: {
-        primaryColor: '#06B6D4', // Cyan
-        secondaryColor: '#083344',
-        accentColor: '#22D3EE',
-        bgStyle: 'dark' as const,
-        fontSans: 'JetBrains Mono',
-        fontHeading: 'Space Grotesk',
-        borderRadius: 'rounded-xl',
-        cardStyle: 'bordered' as const,
-        isDarkMode: true
-      }
-    }
-  ];
 
   const popularSearches = ['ChatGPT vs Claude', 'best coding assistant', 'Midjourney', 'free tools', 'automation'];
 
@@ -273,133 +166,14 @@ export const Navigation: React.FC = () => {
             )}
           </div>
 
-          {/* Custom Theme Picker Popover */}
-          {isAdminAuthorized && (
-            <div className="relative">
-              <button
-                onClick={() => setIsThemeOpen(!isThemeOpen)}
-                className="rounded-xl border border-gray-200 p-2 text-gray-500 hover:bg-gray-100 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-900 transition-colors flex items-center gap-1.5"
-                title="Theme Settings & Presets"
-              >
-                <Palette className="h-5 w-5 text-purple-600 dark:text-purple-400 animate-pulse" />
-                <span className="hidden sm:inline text-xs font-bold text-gray-500 dark:text-gray-400">Appearance</span>
-              </button>
-
-              {isThemeOpen && (
-                <>
-                  {/* Backdrop overlay to dismiss popover on outside click */}
-                  <div className="fixed inset-0 z-40" onClick={() => setIsThemeOpen(false)} />
-                  
-                  {/* Theme Selector Popover Card */}
-                  <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border border-gray-200 bg-white p-5 shadow-2xl dark:border-gray-800 dark:bg-slate-950 z-50 animate-in fade-in slide-in-from-top-3 duration-200">
-                    <div className="flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-900 mb-4">
-                      <div>
-                        <h4 className="text-sm font-extrabold text-gray-900 dark:text-white flex items-center gap-1.5">
-                          <Sparkles className="h-4 w-4 text-purple-500" />
-                          UI Theme & Font Presets
-                        </h4>
-                        <p className="text-[10px] text-gray-400">Click to apply instantly. Live-renders in real-time.</p>
-                      </div>
-                      <span className="text-[9px] bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full font-black uppercase dark:bg-purple-950/40 dark:text-purple-400">
-                        6 Options
-                      </span>
-                    </div>
-
-                    {/* Scrollable preset list */}
-                    <div className="space-y-2.5 max-h-[380px] overflow-y-auto pr-1 no-scrollbar">
-                      {themePresets.map((preset) => {
-                        const isActive = 
-                          themeSettings.primaryColor === preset.settings.primaryColor &&
-                          themeSettings.isDarkMode === preset.settings.isDarkMode &&
-                          themeSettings.fontSans === preset.settings.fontSans;
-
-                        return (
-                          <div
-                            key={preset.id}
-                            onClick={() => {
-                              updateTheme(preset.settings);
-                            }}
-                            className={`group cursor-pointer rounded-xl border p-3 flex items-start gap-3 transition-all duration-200 text-left ${
-                              isActive
-                                ? 'border-purple-500 bg-purple-500/10 ring-2 ring-purple-500/15'
-                                : 'border-gray-150 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-700 hover:bg-gray-50/50 dark:hover:bg-slate-900/40'
-                            }`}
-                          >
-                            {/* Visual Color Pill preview */}
-                            <div className="flex flex-col items-center gap-1 pt-0.5">
-                              <div 
-                                className="h-8 w-8 rounded-full flex items-center justify-center text-[10px] font-bold border shadow-inner transition-transform group-hover:scale-105"
-                                style={{ 
-                                  backgroundColor: preset.settings.secondaryColor === '#F8FAFC' ? '#FFFFFF' : preset.settings.secondaryColor,
-                                  color: preset.settings.primaryColor,
-                                  borderColor: preset.settings.primaryColor + '30'
-                                }}
-                              >
-                                Aa
-                              </div>
-                              <div className="flex gap-0.5 mt-1">
-                                <span className="h-2 w-2 rounded-full border border-gray-200/50" style={{ backgroundColor: preset.settings.primaryColor }} />
-                                <span className="h-2 w-2 rounded-full border border-gray-200/50" style={{ backgroundColor: preset.settings.accentColor }} />
-                              </div>
-                            </div>
-
-                            {/* Details */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs font-bold text-gray-900 dark:text-white truncate">
-                                  {preset.name}
-                                </span>
-                                {preset.isDarkMode ? (
-                                  <span className="text-[8px] bg-slate-100 text-slate-500 px-1.5 py-0.2 rounded font-black uppercase dark:bg-slate-900 dark:text-slate-400">Dark</span>
-                                ) : (
-                                  <span className="text-[8px] bg-amber-50 text-amber-700 px-1.5 py-0.2 rounded font-black uppercase dark:bg-amber-950/30 dark:text-amber-400">Light</span>
-                                )}
-                              </div>
-                              <p className="text-[10px] text-gray-400 leading-normal line-clamp-2 mt-0.5">
-                                {preset.description}
-                              </p>
-                            </div>
-
-                            {/* Checkmark Indicator */}
-                            {isActive && (
-                              <div className="h-5 w-5 rounded-full bg-purple-600 text-white flex items-center justify-center animate-in zoom-in-50 duration-200 mt-1">
-                                <Check className="h-3 w-3" />
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-900 flex justify-between items-center text-[10px] text-gray-400">
-                      <span>Full font customizer in panel</span>
-                      <button 
-                        onClick={() => {
-                          setIsAdminMode(true);
-                          setCurrentAdminView('themes');
-                          setIsThemeOpen(false);
-                        }}
-                        className="text-purple-600 hover:underline dark:text-purple-400 font-bold"
-                      >
-                        Open CMS appearance
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-
           {/* Dark Mode Toggle */}
-          {isAdminAuthorized && (
-            <button
-              onClick={toggleDarkMode}
-              className="rounded-xl border border-gray-200 p-2 text-gray-500 hover:bg-gray-100 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-900 transition-colors"
-              title={themeSettings.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            >
-              {themeSettings.isDarkMode ? <Sun className="h-5 w-5 text-amber-400" /> : <Moon className="h-5 w-5 text-blue-600" />}
-            </button>
-          )}
+          <button
+            onClick={toggleDarkMode}
+            className="rounded-xl border border-gray-200 p-2 text-gray-500 hover:bg-gray-100 dark:border-gray-800 dark:text-gray-400 dark:hover:bg-gray-900 transition-colors"
+            title={themeSettings.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {themeSettings.isDarkMode ? <Sun className="h-5 w-5 text-amber-400" /> : <Moon className="h-5 w-5 text-blue-600" />}
+          </button>
 
           {/* CMS Admin Panel Gateway Button (Visible only in Admin Mode to toggle back to Reader Mode) */}
           {isAdminMode && (

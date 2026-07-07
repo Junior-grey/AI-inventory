@@ -90,8 +90,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Automatically upgrade to expanded database if stored dataset is legacy/minimal
-        if (!parsed.posts || parsed.posts.length < 55 || !parsed.aiTools || parsed.aiTools.length < 35) {
+        // Automatically upgrade to expanded database if stored dataset is legacy/minimal (now requiring 220+ tools)
+        if (!parsed.posts || parsed.posts.length < 55 || !parsed.aiTools || parsed.aiTools.length < 220) {
           const fresh = generateSampleData();
           localStorage.setItem('ai_inventory_db', JSON.stringify(fresh));
           return fresh;
